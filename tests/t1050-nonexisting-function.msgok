@@ -1,0 +1,2 @@
+beep: nonexisting function
+TextTransform: E117: Unknown function: DoesNotExist
