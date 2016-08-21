@@ -28,7 +28,7 @@ function! SubstituteExpression#Expression( text )
     endif
 
     try
-	if l:expression =~? '^\%([gswbv]:\)\?[a-z][a-z0-9#:_]\+$'
+	if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
 	    let l:expression .= '(v:val)'
 	elseif l:expression =~# '^!'
 	    let l:expression = printf('system(%s, v:val)', string(l:expression[1:]))
