@@ -1,0 +1,131 @@
+*SubstituteExpression.txt*	Pass text through an expression.
+
+		   SUBSTITUTE EXPRESSION    by Ingo Karkat
+						    *SubstituteExpression.vim*
+description			|SubstituteExpression-description|
+usage				|SubstituteExpression-usage|
+installation			|SubstituteExpression-installation|
+configuration			|SubstituteExpression-configuration|
+limitations			|SubstituteExpression-limitations|
+known problems			|SubstituteExpression-known-problems|
+todo				|SubstituteExpression-todo|
+history				|SubstituteExpression-history|
+
+==============================================================================
+DESCRIPTION				    *SubstituteExpression-description*
+
+Vim has powerful built-in functions for text manipulation, and maybe you have
+written some custom ones. To apply one of those to text in the buffer, you'd
+have to use |sub-replace-expression|, or a |getline()| / |setline()| combo.
+This works for whole lines, but what if you need to change only parts?
+You may have an external program that transforms text. Again, filtering entire
+lines is easy with built-in |:range!|, but what about arbitrary text?
+
+This plugin allows to pass text covered by a {motion}, or arbitrary visual
+selections, through a queried Vimscript expression, or external shell command,
+or an Ex command that is applied in a separate scratch buffer, and then
+replace the original text with the result.
+As substitutions are a particularly common use case, the plugin offers a
+special shortcut mapping for those.
+
+SOURCE									     *
+
+Extracted from my Substitutions.vim plugin; incorporated mappings and ideas
+from the Express plugin.
+
+SEE ALSO								     *
+(Plugins offering complementary functionality, or plugins using this library.)
+
+RELATED WORKS								     *
+
+- express.vim (https://github.com/tommcdo/vim-express) by Tom McDonald offers
+  an almost identical implementation. It also allows on-the-fly creation of
+  operators via :MapExpress and :MapSubpress, something for which I would use
+  my TextTransform.vim plugin. My plugin offers more advanced (cross-mode)
+  repeats, the :Ex-command expression variant.
+
+==============================================================================
+USAGE						  *SubstituteExpression-usage*
+									  *g=*
+g={motion}              Query for an expression, and pass the text defined by
+			{motion} to it, then replace the text in the buffer
+			with the result.
+                        The expression can be:
+			- a Vimscript expression; |v:val| will contain the
+			  text.
+			- a function name (without parentheses); the function
+			  will be passed the text as a single String argument.
+			- If the expression begins with '!', it will be
+			  treated as an external command, and passed to the
+			  |system()| function, with the text as stdin. (To use
+			  an expression beginning with logical not (|expr-!|),
+			  include a space before the '!' character.)
+			- If the expression begins with ':', the text will be
+			  placed in a scratch buffer, and the Ex command(s)
+			  will be applied.				 *g==*
+g==                     Like |g=|, but for the current line. |linewise|
+
+									  *g:*
+g:{motion}              Like |g=|, but input `pattern/replace/flags` similar to
+                        |:substitute|. Individual lines are filtered through
+                        the |substitute()| function, as if invoked by |g=|
+                        using 'substitute(v:val, ...)'.
+                        Note: Despite looking like a |:substitute| command,
+                        this is really one call to |substitute()| for each
+			line, so the behavior is slightly different.	 *g::*
+g::                     Like |g:|, but for the current line. |linewise|
+
+EXAMPLE						*SubstituteExpression-example*
+
+==============================================================================
+INSTALLATION				   *SubstituteExpression-installation*
+
+This script is packaged as a |vimball|. If you have the "gunzip" decompressor
+in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
+the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
+vimball or via the |:UseVimball| command. >
+    vim SubstituteExpression*.vmb.gz
+    :so %
+To uninstall, use the |:RmVimball| command.
+
+DEPENDENCIES				   *SubstituteExpression-dependencies*
+
+- Requires Vim 7.0 or higher.
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.027 or
+  higher.
+- Requires the |TextTransform.vim| plugin (vimscript #4005), version 1.25 or
+  higher.
+
+==============================================================================
+CONFIGURATION				  *SubstituteExpression-configuration*
+
+For a permanent configuration, put the following commands into your |vimrc|:
+configvar
+						  *SubstituteExpression-remap*
+plugmap
+
+==============================================================================
+LIMITATIONS				    *SubstituteExpression-limitations*
+
+KNOWN PROBLEMS				 *SubstituteExpression-known-problems*
+
+TODO						   *SubstituteExpression-todo*
+
+IDEAS						  *SubstituteExpression-ideas*
+
+==============================================================================
+HISTORY						*SubstituteExpression-history*
+
+GOAL
+First published version.
+
+0.01	20-Aug-2016
+Started development.
+
+==============================================================================
+Copyright: (C) 2016 Ingo Karkat
+The VIM LICENSE applies to this plugin; see |copyright|.
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
