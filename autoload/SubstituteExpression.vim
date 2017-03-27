@@ -13,6 +13,11 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.002	22-Aug-2016	Handle failure of external command by checking
+"				v:shell_error.
+"				Also cancel substitution when the default
+"				delimiter "/' is returned, not just when
+"				substitution is empty.
 "	001	20-Aug-2016	file creation
 
 function! s:ApplyExCommand( command, text )
@@ -37,6 +42,11 @@ function! SubstituteExpression#Expression( text )
 	endif
 
 	let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
+
+	if l:expression =~# '^system(' && v:shell_error != 0
+	    throw ingo#msg#MsgFromShellError('execute', l:result)
+	endif
+
 	let s:expression = l:expression " Only assign here so that if the expression causes an exception, it will not be persisted.
 	return l:result
     catch /^Vim\%((\a\+)\)\=:/
@@ -47,7 +57,7 @@ endfunction
 function! SubstituteExpression#Substitute( text )
     if ! g:TextTransformContext.isRepeat || empty(s:substitution)
 	let l:substitution = input(':s', '/')
-	if empty(l:substitution)
+	if empty(l:substitution) || l:substitution ==# '/'
 	    throw 'Canceled'
 	endif
     else
