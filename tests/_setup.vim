@@ -1,3 +1,5 @@
+call vimtest#AddDependency('vim-ingo-library')
+
 runtime plugin/SubstituteExpression.vim
 
 function! CustomFunc( text )
