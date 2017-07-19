@@ -7,18 +7,23 @@
 "   - ingo/cmdargs/substitute.vim autoload script
 "   - ingo/msg.vim autoload script
 "
-" Copyright: (C) 2016 Ingo Karkat
+" Copyright: (C) 2016-2017 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.003	28-Mar-2017	Copy the current 'filetype' to the scratch
+"				buffer used for :Ex_command (unless the command
+"				sets a different filetype, anyway).
 "   1.00.002	22-Aug-2016	Handle failure of external command by checking
 "				v:shell_error.
 "				Also cancel substitution when the default
 "				delimiter "/' is returned, not just when
 "				substitution is empty.
 "	001	20-Aug-2016	file creation
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! s:ApplyExCommand( command, text )
 endfunction
@@ -38,7 +43,11 @@ function! SubstituteExpression#Expression( text )
 	elseif l:expression =~# '^!'
 	    let l:expression = printf('system(%s, v:val)', string(l:expression[1:]))
 	elseif l:expression =~# '^:'
-	    return ingo#buffer#temp#ExecuteWithText(a:text, l:expression[1:])
+	    let l:originalFiletypeCommand = (empty(&l:filetype) || l:expression =~# '^:setf\s' ?
+	    \   '' :
+	    \   printf("execute 'silent! setf %s'|", &l:filetype)
+	    \)
+	    return ingo#buffer#temp#ExecuteWithText(a:text, l:originalFiletypeCommand . l:expression[1:])
 	endif
 
 	let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
@@ -79,4 +88,6 @@ function! SubstituteExpression#Substitute( text )
     endtry
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
