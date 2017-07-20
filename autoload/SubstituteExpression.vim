@@ -6,6 +6,7 @@
 "   - ingo/cmdargs/pattern.vim autoload script
 "   - ingo/cmdargs/substitute.vim autoload script
 "   - ingo/msg.vim autoload script
+"   - ingo/system.vim autoload script
 "
 " Copyright: (C) 2016-2017 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
@@ -13,6 +14,11 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.004	20-Jul-2017	DWIM: Remove the trailing newline from external
+"				command output unless the selection mode was
+"				linewise. Otherwise, there often will be an
+"				added newline that's not desired, e.g. with
+"				!base64.
 "   1.00.003	28-Mar-2017	Copy the current 'filetype' to the scratch
 "				buffer used for :Ex_command (unless the command
 "				sets a different filetype, anyway).
@@ -38,10 +44,12 @@ function! SubstituteExpression#Expression( text )
     endif
 
     try
+	let l:isSystem = 0
 	if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
 	    let l:expression .= '(v:val)'
 	elseif l:expression =~# '^!'
-	    let l:expression = printf('system(%s, v:val)', string(l:expression[1:]))
+	    let l:expression = printf('%s(%s, v:val)', (g:TextTransformContext.mode ==# 'V' ? 'system' : 'ingo#system#Chomped'), string(l:expression[1:]))
+	    let l:isSystem = 1
 	elseif l:expression =~# '^:'
 	    let l:originalFiletypeCommand = (empty(&l:filetype) || l:expression =~# '^:setf\s' ?
 	    \   '' :
@@ -52,7 +60,7 @@ function! SubstituteExpression#Expression( text )
 
 	let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
 
-	if l:expression =~# '^system(' && v:shell_error != 0
+	if (l:isSystem || l:expression =~# '^system(') && v:shell_error != 0
 	    throw ingo#msg#MsgFromShellError('execute', l:result)
 	endif
 
