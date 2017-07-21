@@ -103,10 +103,17 @@ DEPENDENCIES				   *SubstituteExpression-dependencies*
 CONFIGURATION				  *SubstituteExpression-configuration*
 
 For a permanent configuration, put the following commands into your |vimrc|:
-configvar
 						  *SubstituteExpression-remap*
-plugmap
-
+If you want to use different mappings, map your keys to the
+<Plug>TextTSubstituteExpression#... mapping targets _before_ sourcing the
+script (e.g. in your |vimrc|): >
+    nmap g== <Plug>TextTSubstituteExpression#ExpressionLine
+    nmap g= <Plug>TextTSubstituteExpression#ExpressionOperator
+    xmap g= <Plug>TextTSubstituteExpression#ExpressionVisual
+    nmap g:: <Plug>TextTSubstituteExpression#SubstituteLine
+    nmap g: <Plug>TextTSubstituteExpression#SubstituteOperator
+    xmap g: <Plug>TextTSubstituteExpression#SubstituteVisual
+<
 ==============================================================================
 LIMITATIONS				    *SubstituteExpression-limitations*
 
