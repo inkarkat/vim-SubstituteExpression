@@ -42,12 +42,12 @@ RELATED WORKS								     *
   an almost identical implementation. It also allows on-the-fly creation of
   operators via :MapExpress and :MapSubpress, something for which I would use
   my TextTransform.vim plugin. My plugin offers more advanced (cross-mode)
-  repeats, the :Ex-command expression variant.
+  repeats, and the :Ex-command expression variant.
 
 ==============================================================================
 USAGE						  *SubstituteExpression-usage*
 									  *g=*
-g={motion}              Query for an expression, and pass the text defined by
+g={motion}		Query for an expression, and pass the text defined by
 			{motion} to it, then replace the text in the buffer
 			with the result.
                         The expression can be:
@@ -61,19 +61,22 @@ g={motion}              Query for an expression, and pass the text defined by
 			  an expression beginning with logical not (|expr-!|),
 			  include a space before the '!' character.)
 			- If the expression begins with ':', the text will be
-			  placed in a scratch buffer, and the Ex command(s)
-			  will be applied.				 *g==*
-g==                     Like |g=|, but for the current line. |linewise|
+			  placed in a scratch buffer (of the same 'filetype'),
+			  and the Ex command(s) will be applied.
+			  *v_g=*
+{Visual}g=		Like |g=|, but for the current selection.	 *g==*
+g==			Like |g=|, but for the current line. |linewise|
 
 									  *g:*
-g:{motion}              Like |g=|, but input `pattern/replace/flags` similar to
-                        |:substitute|. Individual lines are filtered through
-                        the |substitute()| function, as if invoked by |g=|
-                        using 'substitute(v:val, ...)'.
-                        Note: Despite looking like a |:substitute| command,
-                        this is really one call to |substitute()| for each
-			line, so the behavior is slightly different.	 *g::*
-g::                     Like |g:|, but for the current line. |linewise|
+g:{motion}		Like |g=|, but input `pattern/replace/flags` similar to
+			|:substitute|. Individual lines are filtered through
+			the |substitute()| function, as if invoked by |g=|
+			using 'substitute(v:val, ...)'.
+			Note: Despite looking like a |:substitute| command,
+			this is really one call to |substitute()| for each
+			line, so the behavior is slightly different.   *v_g::*
+{Visual}g:		Like |g:|, but for the current selection.	 *g::*
+g::			Like |g:|, but for the current line. |linewise|
 
 EXAMPLE						*SubstituteExpression-example*
 
@@ -123,7 +126,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2016 Ingo Karkat
+Copyright: (C) 2016-2017 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
