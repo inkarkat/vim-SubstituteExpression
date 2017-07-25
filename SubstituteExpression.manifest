@@ -1,0 +1,3 @@
+autoload/SubstituteExpression.vim
+plugin/SubstituteExpression.vim
+doc/SubstituteExpression.txt
