@@ -108,8 +108,8 @@ script (e.g. in your vimrc):
 HISTORY
 ------------------------------------------------------------------------------
 
-##### GOAL
-First published version.
+##### 1.00    25-Jul-2017
+- First published version.
 
 ##### 0.01    20-Aug-2016
 - Started development.
