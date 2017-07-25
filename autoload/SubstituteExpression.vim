@@ -12,22 +12,6 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.00.004	20-Jul-2017	DWIM: Remove the trailing newline from external
-"				command output unless the selection mode was
-"				linewise. Otherwise, there often will be an
-"				added newline that's not desired, e.g. with
-"				!base64.
-"   1.00.003	28-Mar-2017	Copy the current 'filetype' to the scratch
-"				buffer used for :Ex_command (unless the command
-"				sets a different filetype, anyway).
-"   1.00.002	22-Aug-2016	Handle failure of external command by checking
-"				v:shell_error.
-"				Also cancel substitution when the default
-"				delimiter "/' is returned, not just when
-"				substitution is empty.
-"	001	20-Aug-2016	file creation
 let s:save_cpo = &cpo
 set cpo&vim
 
