@@ -8,13 +8,6 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.00.002	22-Jul-2017	Don't hard-code the mappings. Instead, let
-"				TextTransform just define the <Plug>-mappings,
-"				and do the canonical default mapping
-"				initialization here.
-"   1.00.001	20-Aug-2016	file creation
 
 " Avoid installing twice or when in unsupported Vim version.
 if exists('g:loaded_SubstituteExpression') || (v:version < 700)
