@@ -33,9 +33,6 @@ SOURCE									     *
 Extracted from my Substitutions.vim plugin; incorporated mappings and ideas
 from the Express plugin.
 
-SEE ALSO								     *
-(Plugins offering complementary functionality, or plugins using this library.)
-
 RELATED WORKS								     *
 
 - express.vim (https://github.com/tommcdo/vim-express) by Tom McDonald offers
@@ -78,15 +75,19 @@ g:{motion}		Like |g=|, but input `pattern/replace/flags` similar to
 {Visual}g:		Like |g:|, but for the current selection.	 *g::*
 g::			Like |g:|, but for the current line. |linewise|
 
-EXAMPLE						*SubstituteExpression-example*
-
 ==============================================================================
 INSTALLATION				   *SubstituteExpression-installation*
 
-This script is packaged as a |vimball|. If you have the "gunzip" decompressor
-in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
-the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
-vimball or via the |:UseVimball| command. >
+The code is hosted in a Git repo at
+    https://github.com/inkarkat/vim-SubstituteExpression
+You can use your favorite plugin manager, or "git clone" into a directory used
+for Vim |packages|. Releases are on the "stable" branch, the latest unstable
+development snapshot on "master".
+
+This script is also packaged as a |vimball|. If you have the "gunzip"
+decompressor in your PATH, simply edit the *.vmb.gz package in Vim; otherwise,
+decompress the archive first, e.g. using WinZip. Inside Vim, install by
+sourcing the vimball or via the |:UseVimball| command. >
     vim SubstituteExpression*.vmb.gz
     :so %
 To uninstall, use the |:RmVimball| command.
@@ -122,6 +123,12 @@ KNOWN PROBLEMS				 *SubstituteExpression-known-problems*
 TODO						   *SubstituteExpression-todo*
 
 IDEAS						  *SubstituteExpression-ideas*
+
+CONTRIBUTING			*SubstituteExpression-contribute*
+
+Report any bugs, send patches, or suggest features via the issue tracker at
+https://github.com/inkarkat/vim-SubstituteExpression/issues or email (address
+below).
 
 ==============================================================================
 HISTORY						*SubstituteExpression-history*

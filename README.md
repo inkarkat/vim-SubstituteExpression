@@ -24,9 +24,6 @@ special shortcut mapping for those.
 Extracted from my Substitutions.vim plugin; incorporated mappings and ideas
 from the Express plugin.
 
-### SEE ALSO
-(Plugins offering complementary functionality, or plugins using this library.)
-
 ### RELATED WORKS
 
 - express.vim (https://github.com/tommcdo/vim-express) by Tom McDonald offers
@@ -43,17 +40,17 @@ USAGE
                             with the result.
                             The expression can be:
                             - a Vimscript expression; v:val will contain the
-                            text.
+                              text.
                             - a function name (without parentheses); the function
-                            will be passed the text as a single String argument.
+                              will be passed the text as a single String argument.
                             - If the expression begins with '!', it will be
-                            treated as an external command, and passed to the
-                            system() function, with the text as stdin. (To use
-                            an expression beginning with logical not (expr-!),
-                            include a space before the '!' character.)
+                              treated as an external command, and passed to the
+                              system() function, with the text as stdin. (To use
+                              an expression beginning with logical not (expr-!),
+                              include a space before the '!' character.)
                             - If the expression begins with ':', the text will be
-                            placed in a scratch buffer (of the same 'filetype'),
-                            and the Ex command(s) will be applied.
+                              placed in a scratch buffer (of the same 'filetype'),
+                              and the Ex command(s) will be applied.
 
     {Visual}g=              Like g=, but for the current selection.
     g==                     Like g=, but for the current line. linewise
@@ -71,10 +68,16 @@ USAGE
 INSTALLATION
 ------------------------------------------------------------------------------
 
-This script is packaged as a vimball. If you have the "gunzip" decompressor
-in your PATH, simply edit the \*.vmb.gz package in Vim; otherwise, decompress
-the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
-vimball or via the :UseVimball command.
+The code is hosted in a Git repo at
+    https://github.com/inkarkat/vim-SubstituteExpression
+You can use your favorite plugin manager, or "git clone" into a directory used
+for Vim packages. Releases are on the "stable" branch, the latest unstable
+development snapshot on "master".
+
+This script is also packaged as a vimball. If you have the "gunzip"
+decompressor in your PATH, simply edit the \*.vmb.gz package in Vim; otherwise,
+decompress the archive first, e.g. using WinZip. Inside Vim, install by
+sourcing the vimball or via the :UseVimball command.
 
     vim SubstituteExpression*.vmb.gz
     :so %
@@ -95,7 +98,7 @@ CONFIGURATION
 For a permanent configuration, put the following commands into your vimrc:
 
 If you want to use different mappings, map your keys to the
- Plug>TextTSubstituteExpression#... mapping targets \_before\_ sourcing the
+ Plug>TextTSubstituteExpression#... mapping targets _before_ sourcing the
 script (e.g. in your vimrc):
 
     nmap g== <Plug>TextTSubstituteExpression#ExpressionLine
@@ -104,6 +107,13 @@ script (e.g. in your vimrc):
     nmap g:: <Plug>TextTSubstituteExpression#SubstituteLine
     nmap g: <Plug>TextTSubstituteExpression#SubstituteOperator
     xmap g: <Plug>TextTSubstituteExpression#SubstituteVisual
+
+CONTRIBUTING
+------------------------------------------------------------------------------
+
+Report any bugs, send patches, or suggest features via the issue tracker at
+https://github.com/inkarkat/vim-SubstituteExpression/issues or email (address
+below).
 
 HISTORY
 ------------------------------------------------------------------------------
