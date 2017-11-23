@@ -15,8 +15,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:ApplyExCommand( command, text )
-endfunction
 function! SubstituteExpression#Expression( text )
     if ! g:TextTransformContext.isRepeat || empty(s:expression)
 	let l:expression = input('=', '')
