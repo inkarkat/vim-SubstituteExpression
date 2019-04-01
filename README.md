@@ -1,4 +1,4 @@
-SUBSTITUTE EXPRESSION   
+SUBSTITUTE EXPRESSION
 ===============================================================================
 _by Ingo Karkat_
 
@@ -31,6 +31,8 @@ from the Express plugin.
   operators via :MapExpress and :MapSubpress, something for which I would use
   my TextTransform.vim plugin. My plugin offers more advanced (cross-mode)
   repeats, and the :Ex-command expression variant.
+- vim-transform (https://github.com/t9md/vim-transform) pipes the selection
+  through (multiple, configurable) external commands.
 
 USAGE
 ------------------------------------------------------------------------------
@@ -98,7 +100,7 @@ CONFIGURATION
 For a permanent configuration, put the following commands into your vimrc:
 
 If you want to use different mappings, map your keys to the
- Plug>TextTSubstituteExpression#... mapping targets _before_ sourcing the
+&lt;Plug&gt;TextTSubstituteExpression#... mapping targets _before_ sourcing the
 script (e.g. in your vimrc):
 
     nmap g== <Plug>TextTSubstituteExpression#ExpressionLine
@@ -125,7 +127,7 @@ HISTORY
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2017 Ingo Karkat -
+Copyright: (C) 2016-2019 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
-Maintainer:     Ingo Karkat <ingo@karkat.de>
+Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

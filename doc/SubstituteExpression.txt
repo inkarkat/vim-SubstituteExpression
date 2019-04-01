@@ -40,6 +40,8 @@ RELATED WORKS								     *
   operators via :MapExpress and :MapSubpress, something for which I would use
   my TextTransform.vim plugin. My plugin offers more advanced (cross-mode)
   repeats, and the :Ex-command expression variant.
+- vim-transform (https://github.com/t9md/vim-transform) pipes the selection
+  through (multiple, configurable) external commands.
 
 ==============================================================================
 USAGE						  *SubstituteExpression-usage*
@@ -140,7 +142,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2016-2017 Ingo Karkat
+Copyright: (C) 2016-2019 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
