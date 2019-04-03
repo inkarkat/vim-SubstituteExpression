@@ -1,4 +1,5 @@
 call vimtest#AddDependency('vim-ingo-library')
+call vimtest#AddDependency('vim-TextTransform')
 
 runtime plugin/SubstituteExpression.vim
 
