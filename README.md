@@ -54,15 +54,17 @@ USAGE
                               placed in a scratch buffer (of the same 'filetype'),
                               and the Ex command(s) will be applied.
                             - If the expression begins with /{pattern}/, each
-                              match inside the text is individually passed through
-                              the following expression / function name / external
+                              match (of the last search pattern if empty) inside
+                              the text is individually passed through the
+                              following expression / function name / external
                               command / Ex command, then re-joined with the
                               separating non-matches in between.
                             - If the expression begins with ^{pattern}^, the text
-                              is split on {pattern}, and each item is individually
-                              passed through the following expression / function
-                              name / external command / Ex command, then re-joined
-                              with the separators in between.
+                              is split on {pattern} (last search pattern if
+                              empty), and each item is individually passed through
+                              the following expression / function name / external
+                              command / Ex command, then re-joined with the
+                              separators in between.
 
     {Visual}g=              Like g=, but for the current selection.
     g==                     Like g=, but for the current line. linewise

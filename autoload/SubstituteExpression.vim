@@ -32,7 +32,15 @@ endfunction
 function! SubstituteExpression#ProcessExpression( text, textMode, expression ) abort
     let [l:separator, l:escapedPattern, l:rest] = ingo#str#split#MatchFirst(a:expression, '^\([/^]\)\zs.\{-}\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\ze\1')
     if ! empty(l:rest)
-	let l:pattern = ingo#escape#Unescape(l:pattern, l:separator)
+	if empty(l:escapedPattern)
+	    if empty(@/)
+		throw 'No previous search pattern'
+	    endif
+	    let l:pattern = @/
+	else
+	    let l:pattern = ingo#escape#Unescape(l:escapedPattern, l:separator)
+	endif
+
 	return join(
 	\   ingo#collections#fromsplit#MapOne(
 	\       (l:separator !=# '/'), a:text, l:pattern,
