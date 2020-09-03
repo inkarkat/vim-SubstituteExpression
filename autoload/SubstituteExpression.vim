@@ -34,10 +34,10 @@ function! s:ProcessExpression( text, textMode, expression ) abort
     let l:isSystem = 0
     if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
 	let l:expression .= '(v:val)'
-    elseif l:expression =~# '^!'
+    elseif ingo#str#StartsWith(l:expression, '!')
 	let l:expression = printf('%s(%s, v:val)', (a:textMode ==# 'V' ? 'system' : 'ingo#system#Chomped'), string(l:expression[1:]))
 	let l:isSystem = 1
-    elseif l:expression =~# '^:'
+    elseif ingo#str#StartsWith(l:expression, ':')
 	let l:originalFiletypeCommand = (empty(&l:filetype) || l:expression =~# '^:setf\s' ?
 	\   '' :
 	\   printf("execute 'silent! setf %s'|", &l:filetype)
@@ -47,7 +47,7 @@ function! s:ProcessExpression( text, textMode, expression ) abort
 
     let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
 
-    if (l:isSystem || l:expression =~# '^system(') && v:shell_error != 0
+    if (l:isSystem || ingo#str#StartsWith(l:expression, 'system(')) && v:shell_error != 0
 	throw ingo#msg#MsgFromShellError('execute', l:result)
     endif
 
