@@ -30,11 +30,12 @@ function! SubstituteExpression#Expression( text )
     endtry
 endfunction
 function! SubstituteExpression#ProcessExpression( text, textMode, expression ) abort
-    let [l:separator, l:pattern, l:rest] = ingo#str#split#MatchFirst(a:expression, '^\([/^]\)\zs.\{-}\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\ze\1')
+    let [l:separator, l:escapedPattern, l:rest] = ingo#str#split#MatchFirst(a:expression, '^\([/^]\)\zs.\{-}\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\ze\1')
     if ! empty(l:rest)
+	let l:pattern = ingo#escape#Unescape(l:pattern, l:separator)
 	return join(
 	\   ingo#collections#fromsplit#MapOne(
-	\       (l:separator !=# '/'), a:text, ingo#escape#Unescape(l:pattern, l:separator),
+	\       (l:separator !=# '/'), a:text, l:pattern,
 	\       printf('SubstituteExpression#ProcessExpression(v:val, %s, %s)', string(a:textMode), string(l:rest[1:]))
 	\   ), ''
 	\)
