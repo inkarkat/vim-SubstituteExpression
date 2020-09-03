@@ -65,6 +65,10 @@ USAGE
                               the following expression / function name / external
                               command / Ex command, then re-joined with the
                               separators in between.
+                            - If the expression begins with ".", each individual
+                              line is passed through the following expression /
+                              function name / external command / Ex command.
+                              separators in between.
 
     {Visual}g=              Like g=, but for the current selection.
     g==                     Like g=, but for the current line. linewise
@@ -134,7 +138,8 @@ HISTORY
 
 ##### 1.10    RELEASEME
 - ENH: Support applying the queried expression individually to matches
-  of prepended /{pattern}/ or to items separated by ^{pattern}^.
+  of prepended /{pattern}/, or to items separated by ^{pattern}^, or via
+  prepended "." to individual lines.
 
 ##### 1.00    25-Jul-2017
 - First published version.

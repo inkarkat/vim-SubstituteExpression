@@ -30,6 +30,15 @@ function! SubstituteExpression#Expression( text )
     endtry
 endfunction
 function! SubstituteExpression#ProcessExpression( text, textMode, expression ) abort
+    if ingo#str#StartsWith(a:expression, '.')
+	return join(
+	\   map(
+	\       split(substitute(a:text, '\n$', '', ''), '\n', 1),
+	\       printf('SubstituteExpression#ProcessExpression(v:val, %s, %s)', string(a:textMode), string(a:expression[1:]))
+	\   ), "\n"
+	\)
+    endif
+
     let [l:separator, l:escapedPattern, l:rest] = ingo#str#split#MatchFirst(a:expression, '^\([/^]\)\zs.\{-}\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\ze\1')
     if ! empty(l:rest)
 	if empty(l:escapedPattern)
