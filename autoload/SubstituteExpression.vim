@@ -1,12 +1,7 @@
 " SubstituteExpression.vim: Pass text through an expression.
 "
 " DEPENDENCIES:
-"   - ingo/actions.vim autoload script
-"   - ingo/buffer/temp.vim autoload script
-"   - ingo/cmdargs/pattern.vim autoload script
-"   - ingo/cmdargs/substitute.vim autoload script
-"   - ingo/msg.vim autoload script
-"   - ingo/system.vim autoload script
+"   - ingo-library.vim plugin
 "
 " Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
