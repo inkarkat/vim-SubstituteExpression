@@ -53,6 +53,16 @@ USAGE
                             - If the expression begins with ':', the text will be
                               placed in a scratch buffer (of the same 'filetype'),
                               and the Ex command(s) will be applied.
+                            - If the expression begins with /{pattern}/, each
+                              match inside the text is individually passed through
+                              the following expression / function name / external
+                              command / Ex command, then re-joined with the
+                              separating non-matches in between.
+                            - If the expression begins with ^{pattern}^, the text
+                              is split on {pattern}, and each item is individually
+                              passed through the following expression / function
+                              name / external command / Ex command, then re-joined
+                              with the separators in between.
 
     {Visual}g=              Like g=, but for the current selection.
     g==                     Like g=, but for the current line. linewise
@@ -120,6 +130,10 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
+##### 1.10    RELEASEME
+- ENH: Support applying the queried expression individually to matches
+  of prepended /{pattern}/ or to items separated by ^{pattern}^.
+
 ##### 1.00    25-Jul-2017
 - First published version.
 
@@ -127,7 +141,7 @@ HISTORY
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2019 Ingo Karkat -
+Copyright: (C) 2016-2020 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

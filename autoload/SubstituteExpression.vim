@@ -21,7 +21,7 @@ function! SubstituteExpression#Expression( text )
     endif
 
     try
-	let l:result = s:ProcessExpression(a:text, g:TextTransformContext.mode, l:expression)
+	let l:result = SubstituteExpression#ProcessExpression(a:text, g:TextTransformContext.mode, l:expression)
 	let s:expression = l:expression " Only assign here so that if the expression causes an exception, it will not be persisted.
 	return l:result
     catch /^Vim\%((\a\+)\)\=:/
@@ -29,7 +29,17 @@ function! SubstituteExpression#Expression( text )
 	throw ingo#msg#MsgFromVimException()   " Avoid E608: Cannot :throw exceptions with 'Vim' prefix
     endtry
 endfunction
-function! s:ProcessExpression( text, textMode, expression ) abort
+function! SubstituteExpression#ProcessExpression( text, textMode, expression ) abort
+    let [l:separator, l:pattern, l:rest] = ingo#str#split#MatchFirst(a:expression, '^\([/^]\)\zs.\{-}\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\ze\1')
+    if ! empty(l:rest)
+	return join(
+	\   ingo#collections#fromsplit#MapOne(
+	\       (l:separator !=# '/'), a:text, ingo#escape#Unescape(l:pattern, l:separator),
+	\       printf('SubstituteExpression#ProcessExpression(v:val, %s, %s)', string(a:textMode), string(l:rest[1:]))
+	\   ), ''
+	\)
+    endif
+
     let l:expression = a:expression
     let l:isSystem = 0
     if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
