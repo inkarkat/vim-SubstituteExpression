@@ -8,7 +8,7 @@
 "   - ingo/msg.vim autoload script
 "   - ingo/system.vim autoload script
 "
-" Copyright: (C) 2016-2017 Ingo Karkat
+" Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -26,32 +26,37 @@ function! SubstituteExpression#Expression( text )
     endif
 
     try
-	let l:isSystem = 0
-	if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
-	    let l:expression .= '(v:val)'
-	elseif l:expression =~# '^!'
-	    let l:expression = printf('%s(%s, v:val)', (g:TextTransformContext.mode ==# 'V' ? 'system' : 'ingo#system#Chomped'), string(l:expression[1:]))
-	    let l:isSystem = 1
-	elseif l:expression =~# '^:'
-	    let l:originalFiletypeCommand = (empty(&l:filetype) || l:expression =~# '^:setf\s' ?
-	    \   '' :
-	    \   printf("execute 'silent! setf %s'|", &l:filetype)
-	    \)
-	    return ingo#buffer#temp#ExecuteWithText(a:text, l:originalFiletypeCommand . l:expression[1:])
-	endif
-
-	let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
-
-	if (l:isSystem || l:expression =~# '^system(') && v:shell_error != 0
-	    throw ingo#msg#MsgFromShellError('execute', l:result)
-	endif
-
+	let l:result = s:ProcessExpression(a:text, g:TextTransformContext.mode, l:expression)
 	let s:expression = l:expression " Only assign here so that if the expression causes an exception, it will not be persisted.
 	return l:result
     catch /^Vim\%((\a\+)\)\=:/
 	let s:expression = ''   " Empty the persisted expression so that the user will be re-queried on repeat.
 	throw ingo#msg#MsgFromVimException()   " Avoid E608: Cannot :throw exceptions with 'Vim' prefix
     endtry
+endfunction
+function! s:ProcessExpression( text, textMode, expression ) abort
+    let l:expression = a:expression
+    let l:isSystem = 0
+    if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
+	let l:expression .= '(v:val)'
+    elseif l:expression =~# '^!'
+	let l:expression = printf('%s(%s, v:val)', (a:textMode ==# 'V' ? 'system' : 'ingo#system#Chomped'), string(l:expression[1:]))
+	let l:isSystem = 1
+    elseif l:expression =~# '^:'
+	let l:originalFiletypeCommand = (empty(&l:filetype) || l:expression =~# '^:setf\s' ?
+	\   '' :
+	\   printf("execute 'silent! setf %s'|", &l:filetype)
+	\)
+	return ingo#buffer#temp#ExecuteWithText(a:text, l:originalFiletypeCommand . l:expression[1:])
+    endif
+
+    let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
+
+    if (l:isSystem || l:expression =~# '^system(') && v:shell_error != 0
+	throw ingo#msg#MsgFromShellError('execute', l:result)
+    endif
+
+    return l:result
 endfunction
 function! SubstituteExpression#Substitute( text )
     if ! g:TextTransformContext.isRepeat || empty(s:substitution)
