@@ -53,7 +53,7 @@ function! SubstituteExpression#ProcessExpression( text, textMode, expression ) a
 	return join(
 	\   ingo#collections#fromsplit#MapOne(
 	\       (l:separator !=# '/'), a:text, l:pattern,
-	\       printf('SubstituteExpression#ProcessExpression(v:val, %s, %s)', string(a:textMode), string(l:rest[1:]))
+	\       printf('SubstituteExpression#ProcessExpression(v:val, (ingo#str#EndsWith(v:val, "\n") ? "V" : "v"), %s)', string(l:rest[1:]))
 	\   ), ''
 	\)
     endif
