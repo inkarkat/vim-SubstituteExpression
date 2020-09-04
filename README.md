@@ -15,7 +15,8 @@ lines is easy with built-in :range!, but what about arbitrary text?
 This plugin allows to pass text covered by a {motion}, or arbitrary visual
 selections, through a queried Vimscript expression, or external shell command,
 or an Ex command that is applied in a separate scratch buffer, and then
-replace the original text with the result.
+replace the original text (or parts of it extracted by pattern matches or
+splitting) with the result.
 As substitutions are a particularly common use case, the plugin offers a
 special shortcut mapping for those.
 
@@ -105,7 +106,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.027 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.043 or
   higher.
 - Requires the TextTransform.vim plugin ([vimscript #4005](http://www.vim.org/scripts/script.php?script_id=4005)), version 1.25 or
   higher.
@@ -140,6 +141,8 @@ HISTORY
 - ENH: Support applying the queried expression individually to matches
   of prepended /{pattern}/, or to items separated by ^{pattern}^, or via
   prepended "." to individual lines.
+
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.043!__
 
 ##### 1.00    25-Jul-2017
 - First published version.

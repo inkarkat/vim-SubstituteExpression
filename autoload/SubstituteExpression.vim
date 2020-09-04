@@ -21,65 +21,13 @@ function! SubstituteExpression#Expression( text )
     endif
 
     try
-	let l:result = SubstituteExpression#ProcessExpression(a:text, g:TextTransformContext.mode, l:expression)
+	let l:result = ingo#subs#apply#FlexibleExpression(a:text, g:TextTransformContext.mode, l:expression)
 	let s:expression = l:expression " Only assign here so that if the expression causes an exception, it will not be persisted.
 	return l:result
     catch /^Vim\%((\a\+)\)\=:/
 	let s:expression = ''   " Empty the persisted expression so that the user will be re-queried on repeat.
 	throw ingo#msg#MsgFromVimException()   " Avoid E608: Cannot :throw exceptions with 'Vim' prefix
     endtry
-endfunction
-function! SubstituteExpression#ProcessExpression( text, textMode, expression ) abort
-    if ingo#str#StartsWith(a:expression, '.')
-	return join(
-	\   map(
-	\       split(substitute(a:text, '\n$', '', ''), '\n', 1),
-	\       printf('SubstituteExpression#ProcessExpression(v:val, "v", %s)', string(a:expression[1:]))
-	\   ), "\n"
-	\)
-    endif
-
-    let [l:separator, l:escapedPattern, l:rest] = ingo#str#split#MatchFirst(a:expression, '^\([/^]\)\zs.\{-}\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\ze\1')
-    if ! empty(l:rest)
-	if empty(l:escapedPattern)
-	    if empty(@/)
-		throw 'No previous search pattern'
-	    endif
-	    let l:pattern = @/
-	else
-	    let l:pattern = ingo#escape#Unescape(l:escapedPattern, l:separator)
-	endif
-
-	return join(
-	\   ingo#collections#fromsplit#MapOne(
-	\       (l:separator !=# '/'), a:text, l:pattern,
-	\       printf('SubstituteExpression#ProcessExpression(v:val, (ingo#str#EndsWith(v:val, "\n") ? "V" : "v"), %s)', string(l:rest[1:]))
-	\   ), ''
-	\)
-    endif
-
-    let l:expression = a:expression
-    let l:isSystem = 0
-    if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
-	let l:expression .= '(v:val)'
-    elseif ingo#str#StartsWith(l:expression, '!')
-	let l:expression = printf('%s(%s, v:val)', (a:textMode ==# 'V' ? 'system' : 'ingo#system#Chomped'), string(l:expression[1:]))
-	let l:isSystem = 1
-    elseif ingo#str#StartsWith(l:expression, ':')
-	let l:originalFiletypeCommand = (empty(&l:filetype) || l:expression =~# '^:setf\s' ?
-	\   '' :
-	\   printf("execute 'silent! setf %s'|", &l:filetype)
-	\)
-	return ingo#buffer#temp#ExecuteWithText(a:text, l:originalFiletypeCommand . l:expression[1:])
-    endif
-
-    let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
-
-    if (l:isSystem || ingo#str#StartsWith(l:expression, 'system(')) && v:shell_error != 0
-	throw ingo#msg#MsgFromShellError('execute', l:result)
-    endif
-
-    return l:result
 endfunction
 function! SubstituteExpression#Substitute( text )
     if ! g:TextTransformContext.isRepeat || empty(s:substitution)
