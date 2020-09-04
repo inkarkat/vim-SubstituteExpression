@@ -34,7 +34,7 @@ function! SubstituteExpression#ProcessExpression( text, textMode, expression ) a
 	return join(
 	\   map(
 	\       split(substitute(a:text, '\n$', '', ''), '\n', 1),
-	\       printf('SubstituteExpression#ProcessExpression(v:val, %s, %s)', string(a:textMode), string(a:expression[1:]))
+	\       printf('SubstituteExpression#ProcessExpression(v:val, "v", %s)', string(a:expression[1:]))
 	\   ), "\n"
 	\)
     endif
