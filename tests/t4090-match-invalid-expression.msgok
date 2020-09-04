@@ -1,0 +1,2 @@
+/\s*beep: invalid expression/
+TextTransform: E15: Invalid expression: ) * 2

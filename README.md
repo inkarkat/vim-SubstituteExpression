@@ -15,7 +15,8 @@ lines is easy with built-in :range!, but what about arbitrary text?
 This plugin allows to pass text covered by a {motion}, or arbitrary visual
 selections, through a queried Vimscript expression, or external shell command,
 or an Ex command that is applied in a separate scratch buffer, and then
-replace the original text with the result.
+replace the original text (or parts of it extracted by pattern matches or
+splitting) with the result.
 As substitutions are a particularly common use case, the plugin offers a
 special shortcut mapping for those.
 
@@ -53,6 +54,22 @@ USAGE
                             - If the expression begins with ':', the text will be
                               placed in a scratch buffer (of the same 'filetype'),
                               and the Ex command(s) will be applied.
+                            - If the expression begins with /{pattern}/, each
+                              match (of the last search pattern if empty) inside
+                              the text is individually passed through the
+                              following expression / function name / external
+                              command / Ex command, then re-joined with the
+                              separating non-matches in between.
+                            - If the expression begins with ^{pattern}^, the text
+                              is split on {pattern} (last search pattern if
+                              empty), and each item is individually passed through
+                              the following expression / function name / external
+                              command / Ex command, then re-joined with the
+                              separators in between.
+                            - If the expression begins with ".", each individual
+                              line is passed through the following expression /
+                              function name / external command / Ex command.
+                              separators in between.
 
     {Visual}g=              Like g=, but for the current selection.
     g==                     Like g=, but for the current line. linewise
@@ -89,7 +106,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.027 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.043 or
   higher.
 - Requires the TextTransform.vim plugin ([vimscript #4005](http://www.vim.org/scripts/script.php?script_id=4005)), version 1.25 or
   higher.
@@ -120,6 +137,13 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
+##### 1.10    RELEASEME
+- ENH: Support applying the queried expression individually to matches
+  of prepended /{pattern}/, or to items separated by ^{pattern}^, or via
+  prepended "." to individual lines.
+
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.043!__
+
 ##### 1.00    25-Jul-2017
 - First published version.
 
@@ -127,7 +151,7 @@ HISTORY
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2019 Ingo Karkat -
+Copyright: (C) 2016-2020 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
