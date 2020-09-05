@@ -60,16 +60,25 @@ USAGE
                               following expression / function name / external
                               command / Ex command, then re-joined with the
                               separating non-matches in between.
+                              When an expression returns a List, all elements are
+                              joined with the first occurring separator in the input
+                              text.
                             - If the expression begins with ^{pattern}^, the text
                               is split on {pattern} (last search pattern if
                               empty), and each item is individually passed through
                               the following expression / function name / external
                               command / Ex command, then re-joined with the
                               separators in between.
+                              When an expression returns a List, all elements are
+                              joined with the first separator match of {pattern} in
+                              the input text.
                             - If the expression begins with ".", each individual
                               line is passed through the following expression /
                               function name / external command / Ex command.
                               separators in between.
+                              To omit a line through an expression, return an empty
+                              List ([]). To expand a line into several, return a
+                              List of lines.
 
     {Visual}g=              Like g=, but for the current selection.
     g==                     Like g=, but for the current line. linewise
