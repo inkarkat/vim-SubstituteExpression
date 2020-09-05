@@ -25,6 +25,12 @@ special shortcut mapping for those.
 Extracted from my Substitutions.vim plugin; incorporated mappings and ideas
 from the Express plugin.
 
+### SEE ALSO
+
+- UnconditionalPaste.vim ([vimscript #3355](http://www.vim.org/scripts/script.php?script_id=3355)) provides a g=p mapping that
+  applies the same queried flexible expression to register contents and then
+  pastes the result.
+
 ### RELATED WORKS
 
 - express.vim (https://github.com/tommcdo/vim-express) by Tom McDonald offers
