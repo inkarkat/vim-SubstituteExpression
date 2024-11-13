@@ -1,4 +1,6 @@
 call vimtest#AddDependency('vim-ingo-library')
+call vimtest#AddDependency('vim-TextTransform')
+call vimtest#AddDependency('vim-SidTools')  " for testing
 
 runtime plugin/SubstituteExpression.vim
 

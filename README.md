@@ -1,4 +1,4 @@
-SUBSTITUTE EXPRESSION   
+SUBSTITUTE EXPRESSION
 ===============================================================================
 _by Ingo Karkat_
 
@@ -15,7 +15,8 @@ lines is easy with built-in :range!, but what about arbitrary text?
 This plugin allows to pass text covered by a {motion}, or arbitrary visual
 selections, through a queried Vimscript expression, or external shell command,
 or an Ex command that is applied in a separate scratch buffer, and then
-replace the original text with the result.
+replace the original text (or parts of it extracted by pattern matches or
+splitting) with the result.
 As substitutions are a particularly common use case, the plugin offers a
 special shortcut mapping for those.
 
@@ -25,7 +26,10 @@ Extracted from my Substitutions.vim plugin; incorporated mappings and ideas
 from the Express plugin.
 
 ### SEE ALSO
-(Plugins offering complementary functionality, or plugins using this library.)
+
+- UnconditionalPaste.vim ([vimscript #3355](http://www.vim.org/scripts/script.php?script_id=3355)) provides a g=p mapping that
+  applies the same queried flexible expression to register contents and then
+  pastes the result.
 
 ### RELATED WORKS
 
@@ -34,6 +38,8 @@ from the Express plugin.
   operators via :MapExpress and :MapSubpress, something for which I would use
   my TextTransform.vim plugin. My plugin offers more advanced (cross-mode)
   repeats, and the :Ex-command expression variant.
+- vim-transform (https://github.com/t9md/vim-transform) pipes the selection
+  through (multiple, configurable) external commands.
 
 USAGE
 ------------------------------------------------------------------------------
@@ -43,17 +49,42 @@ USAGE
                             with the result.
                             The expression can be:
                             - a Vimscript expression; v:val will contain the
-                            text.
+                              text.
                             - a function name (without parentheses); the function
-                            will be passed the text as a single String argument.
+                              will be passed the text as a single String argument.
                             - If the expression begins with '!', it will be
-                            treated as an external command, and passed to the
-                            system() function, with the text as stdin. (To use
-                            an expression beginning with logical not (expr-!),
-                            include a space before the '!' character.)
+                              treated as an external command, and passed to the
+                              system() function, with the text as stdin. (To use
+                              an expression beginning with logical not (expr-!),
+                              include a space before the '!' character.)
                             - If the expression begins with ':', the text will be
-                            placed in a scratch buffer (of the same 'filetype'),
-                            and the Ex command(s) will be applied.
+                              placed in a scratch buffer (of the same 'filetype'),
+                              and the Ex command(s) will be applied.
+                            - If the expression begins with /{pattern}/, each
+                              match (of the last search pattern if empty) inside
+                              the text is individually passed through the
+                              following expression / function name / external
+                              command / Ex command, then re-joined with the
+                              separating non-matches in between.
+                              When an expression returns a List, all elements are
+                              joined with the first occurring separator in the input
+                              text.
+                            - If the expression begins with ^{pattern}^, the text
+                              is split on {pattern} (last search pattern if
+                              empty), and each item is individually passed through
+                              the following expression / function name / external
+                              command / Ex command, then re-joined with the
+                              separators in between.
+                              When an expression returns a List, all elements are
+                              joined with the first separator match of {pattern} in
+                              the input text.
+                            - If the expression begins with ".", each individual
+                              line is passed through the following expression /
+                              function name / external command / Ex command.
+                              separators in between.
+                              To omit a line through an expression, return an empty
+                              List ([]). To expand a line into several, return a
+                              List of lines.
 
     {Visual}g=              Like g=, but for the current selection.
     g==                     Like g=, but for the current line. linewise
@@ -71,10 +102,16 @@ USAGE
 INSTALLATION
 ------------------------------------------------------------------------------
 
-This script is packaged as a vimball. If you have the "gunzip" decompressor
-in your PATH, simply edit the \*.vmb.gz package in Vim; otherwise, decompress
-the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
-vimball or via the :UseVimball command.
+The code is hosted in a Git repo at
+    https://github.com/inkarkat/vim-SubstituteExpression
+You can use your favorite plugin manager, or "git clone" into a directory used
+for Vim packages. Releases are on the "stable" branch, the latest unstable
+development snapshot on "master".
+
+This script is also packaged as a vimball. If you have the "gunzip"
+decompressor in your PATH, simply edit the \*.vmb.gz package in Vim; otherwise,
+decompress the archive first, e.g. using WinZip. Inside Vim, install by
+sourcing the vimball or via the :UseVimball command.
 
     vim SubstituteExpression*.vmb.gz
     :so %
@@ -84,7 +121,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.027 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.043 or
   higher.
 - Requires the TextTransform.vim plugin ([vimscript #4005](http://www.vim.org/scripts/script.php?script_id=4005)), version 1.25 or
   higher.
@@ -95,7 +132,7 @@ CONFIGURATION
 For a permanent configuration, put the following commands into your vimrc:
 
 If you want to use different mappings, map your keys to the
- Plug>TextTSubstituteExpression#... mapping targets \_before\_ sourcing the
+&lt;Plug&gt;TextTSubstituteExpression#... mapping targets _before_ sourcing the
 script (e.g. in your vimrc):
 
     nmap g== <Plug>TextTSubstituteExpression#ExpressionLine
@@ -105,8 +142,22 @@ script (e.g. in your vimrc):
     nmap g: <Plug>TextTSubstituteExpression#SubstituteOperator
     xmap g: <Plug>TextTSubstituteExpression#SubstituteVisual
 
+CONTRIBUTING
+------------------------------------------------------------------------------
+
+Report any bugs, send patches, or suggest features via the issue tracker at
+https://github.com/inkarkat/vim-SubstituteExpression/issues or email (address
+below).
+
 HISTORY
 ------------------------------------------------------------------------------
+
+##### 1.10    13-Nov-2024
+- ENH: Support applying the queried expression individually to matches
+  of prepended /{pattern}/, or to items separated by ^{pattern}^, or via
+  prepended "." to individual lines.
+
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.043!__
 
 ##### 1.00    25-Jul-2017
 - First published version.
@@ -115,7 +166,7 @@ HISTORY
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2017 Ingo Karkat -
+Copyright: (C) 2016-2024 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
-Maintainer:     Ingo Karkat <ingo@karkat.de>
+Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

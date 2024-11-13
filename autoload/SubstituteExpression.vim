@@ -1,22 +1,15 @@
 " SubstituteExpression.vim: Pass text through an expression.
 "
 " DEPENDENCIES:
-"   - ingo/actions.vim autoload script
-"   - ingo/buffer/temp.vim autoload script
-"   - ingo/cmdargs/pattern.vim autoload script
-"   - ingo/cmdargs/substitute.vim autoload script
-"   - ingo/msg.vim autoload script
-"   - ingo/system.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2016-2017 Ingo Karkat
+" Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:ApplyExCommand( command, text )
-endfunction
 function! SubstituteExpression#Expression( text )
     if ! g:TextTransformContext.isRepeat || empty(s:expression)
 	let l:expression = input('=', '')
@@ -28,26 +21,7 @@ function! SubstituteExpression#Expression( text )
     endif
 
     try
-	let l:isSystem = 0
-	if l:expression =~? '^\%(g:\)\?[a-z][a-z0-9#_]\+$'
-	    let l:expression .= '(v:val)'
-	elseif l:expression =~# '^!'
-	    let l:expression = printf('%s(%s, v:val)', (g:TextTransformContext.mode ==# 'V' ? 'system' : 'ingo#system#Chomped'), string(l:expression[1:]))
-	    let l:isSystem = 1
-	elseif l:expression =~# '^:'
-	    let l:originalFiletypeCommand = (empty(&l:filetype) || l:expression =~# '^:setf\s' ?
-	    \   '' :
-	    \   printf("execute 'silent! setf %s'|", &l:filetype)
-	    \)
-	    return ingo#buffer#temp#ExecuteWithText(a:text, l:originalFiletypeCommand . l:expression[1:])
-	endif
-
-	let l:result = ingo#actions#EvaluateWithVal(l:expression, a:text)
-
-	if (l:isSystem || l:expression =~# '^system(') && v:shell_error != 0
-	    throw ingo#msg#MsgFromShellError('execute', l:result)
-	endif
-
+	let l:result = ingo#subs#apply#FlexibleExpression(a:text, g:TextTransformContext.mode, l:expression)
 	let s:expression = l:expression " Only assign here so that if the expression causes an exception, it will not be persisted.
 	return l:result
     catch /^Vim\%((\a\+)\)\=:/
