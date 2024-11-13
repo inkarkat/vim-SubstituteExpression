@@ -152,7 +152,7 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
-##### 1.10    RELEASEME
+##### 1.10    13-Nov-2024
 - ENH: Support applying the queried expression individually to matches
   of prepended /{pattern}/, or to items separated by ^{pattern}^, or via
   prepended "." to individual lines.
@@ -166,7 +166,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2020 Ingo Karkat -
+Copyright: (C) 2016-2024 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
