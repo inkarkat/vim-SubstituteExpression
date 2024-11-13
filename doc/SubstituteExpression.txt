@@ -167,7 +167,7 @@ below).
 ==============================================================================
 HISTORY						*SubstituteExpression-history*
 
-1.10	RELEASEME
+1.10	13-Nov-2024
 - ENH: Support applying the queried expression individually to matches
   of prepended /{pattern}/, or to items separated by ^{pattern}^, or via
   prepended "." to individual lines.
@@ -180,7 +180,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2016-2020 Ingo Karkat
+Copyright: (C) 2016-2024 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
